@@ -1,11 +1,12 @@
+# Build deshabilitado - Se usa GitHub Actions para build y deploy
+# El build se hace en GitHub Actions y luego se despliega a Netlify
+
 [build]
   publish = "dist"
-  command = "npm run build"
+  # command comentado - el build se hace en GitHub Actions
+  # command = "npm run build"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  NODE_VERSION = "18"

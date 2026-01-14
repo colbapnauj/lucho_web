@@ -23,16 +23,35 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Cargar service account key
-const serviceAccountPath = join(__dirname, '..', 'service-account-key.json');
+// Primero intenta desde variable de entorno (para Netlify)
+// Luego desde archivo (para local y GitHub Actions)
 
 let serviceAccount;
-try {
-  const serviceAccountFile = readFileSync(serviceAccountPath, 'utf8');
-  serviceAccount = JSON.parse(serviceAccountFile);
-} catch (error) {
-  console.error('❌ Error: No se encontró el archivo service-account-key.json');
-  console.error('   Este script requiere credenciales de servicio para leer Firebase');
-  process.exit(1);
+
+// Opción 1: Desde variable de entorno (Netlify)
+if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+  try {
+    serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    console.log('✅ Service account cargado desde variable de entorno');
+  } catch (error) {
+    console.error('❌ Error parseando FIREBASE_SERVICE_ACCOUNT:', error.message);
+    process.exit(1);
+  }
+} else {
+  // Opción 2: Desde archivo (local y GitHub Actions)
+  const serviceAccountPath = join(__dirname, '..', 'service-account-key.json');
+  try {
+    const serviceAccountFile = readFileSync(serviceAccountPath, 'utf8');
+    serviceAccount = JSON.parse(serviceAccountFile);
+    console.log('✅ Service account cargado desde archivo');
+  } catch (error) {
+    console.error('❌ Error: No se encontró el archivo service-account-key.json');
+    console.error('   Este script requiere credenciales de servicio para leer Firebase');
+    console.error('   Opciones:');
+    console.error('   1. Tener el archivo service-account-key.json en la raíz');
+    console.error('   2. O configurar la variable de entorno FIREBASE_SERVICE_ACCOUNT');
+    process.exit(1);
+  }
 }
 
 // Inicializar Firebase Admin
