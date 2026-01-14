@@ -319,8 +319,10 @@ async function buildDist() {
   });
   
   // Crear _redirects para Netlify (SPA)
-  // IMPORTANTE: Los redirects se procesan en orden, así que los específicos van primero
-  // Netlify sirve archivos estáticos automáticamente, pero los redirects ayudan con rutas
+  // IMPORTANTE: Netlify sirve archivos estáticos automáticamente
+  // El redirect /* solo aplica cuando el archivo NO existe físicamente
+  // Los archivos con extensiones (.js, .css, etc.) se sirven automáticamente
+  // Solo redirigimos rutas que NO son archivos estáticos a index.html (SPA)
   const redirectsContent = `# Redirects para SPA
 # Los archivos estáticos se sirven automáticamente por Netlify
 # Este redirect solo aplica a rutas que no son archivos estáticos
