@@ -4,6 +4,26 @@
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Landing page cargada');
   
+  // Menú hamburguesa
+  const navbarToggle = document.querySelector('.navbar-toggle');
+  const navbarMenu = document.querySelector('.navbar-menu');
+  
+  if (navbarToggle && navbarMenu) {
+    navbarToggle.addEventListener('click', () => {
+      navbarToggle.classList.toggle('navbar-toggle-active');
+      navbarMenu.classList.toggle('navbar-menu-active');
+    });
+    
+    // Cerrar menú al hacer clic en un enlace o botón
+    const menuLinks = navbarMenu.querySelectorAll('a, .menu-item');
+    menuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navbarToggle.classList.remove('navbar-toggle-active');
+        navbarMenu.classList.remove('navbar-menu-active');
+      });
+    });
+  }
+  
   // Galería con transición automática de desplazamiento
   const gallerySlides = document.querySelectorAll('.gallery-slide');
   let currentSlide = 0;
