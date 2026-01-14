@@ -316,10 +316,20 @@ async function buildDist() {
   console.log(`   - HTML estático: index.html`);
   console.log(`   - Assets copiados`);
   console.log(`   - Listo para deploy en Netlify`);
+  
+  // Cerrar conexiones de Firebase Admin
+  if (admin.apps.length > 0) {
+    await Promise.all(admin.apps.map(app => app.delete()));
+  }
 }
 
 // Ejecutar build
-buildDist().catch(error => {
-  console.error('❌ Error en el build:', error);
-  process.exit(1);
-});
+buildDist()
+  .then(() => {
+    console.log('\n✅ Proceso de build finalizado');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('❌ Error en el build:', error);
+    process.exit(1);
+  });

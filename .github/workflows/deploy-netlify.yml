@@ -41,6 +41,16 @@ jobs:
       
       - name: Build static site
         run: npm run build
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      
+      - name: Verify dist directory
+        run: |
+          echo "📁 Contenido de dist/:"
+          ls -la dist/ || echo "⚠️  dist/ no existe"
+          echo ""
+          echo "📄 Verificando index.html:"
+          test -f dist/index.html && echo "✅ index.html existe" || echo "❌ index.html no existe"
       
       - name: Deploy to Netlify
         uses: netlify/actions/cli@master
