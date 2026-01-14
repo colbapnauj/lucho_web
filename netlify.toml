@@ -6,7 +6,10 @@
   # command comentado - el build se hace en GitHub Actions
   # command = "npm run build"
 
+# Netlify sirve archivos estáticos automáticamente (admin.html, admin.js, admin.css, etc.)
+# Solo redirigimos rutas que no son archivos estáticos a index.html (SPA)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false

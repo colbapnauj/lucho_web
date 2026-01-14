@@ -221,6 +221,12 @@ body {
   margin-bottom: 0;
 }
 
+.admin-header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 .notification {
   padding: 1rem;
   border-radius: 6px;

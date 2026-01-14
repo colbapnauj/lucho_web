@@ -177,6 +177,12 @@ class AdminController {
         }
       });
     }
+    
+    // Publish button
+    const publishBtn = document.getElementById('btn-publish');
+    if (publishBtn) {
+      publishBtn.addEventListener('click', () => this.handlePublish());
+    }
   }
   
   /**
@@ -833,6 +839,83 @@ class AdminController {
     const previewPanel = document.getElementById('hero-preview-panel');
     if (previewPanel && previewPanel.style.display !== 'none') {
       this.updateHeroPreviewFromForm();
+    }
+  }
+  
+  /**
+   * Maneja la publicación del sitio
+   */
+  async handlePublish() {
+    const publishBtn = document.getElementById('btn-publish');
+    if (!publishBtn) return;
+    
+    // Confirmar publicación
+    if (!confirm('¿Estás seguro de que deseas publicar los cambios? Esto disparará un nuevo deploy en Netlify.')) {
+      return;
+    }
+    
+    // Deshabilitar botón
+    publishBtn.disabled = true;
+    const originalText = publishBtn.innerHTML;
+    publishBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publicando...';
+    
+    try {
+      // Obtener token de autenticación
+      const user = window.firebaseSDK?.auth?.currentUser;
+      if (!user) {
+        throw new Error('No autenticado');
+      }
+      
+      const token = await user.getIdToken();
+      
+      // Obtener projectId desde la configuración de Firebase
+      // La configuración está en firebase-init.js, pero podemos obtenerla del auth
+      const projectId = 'lucho-web-cms'; // TODO: Obtener dinámicamente
+      const functionUrl = `https://us-central1-${projectId}.cloudfunctions.net/publish`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          userId: user.uid
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Error desconocido' }));
+        throw new Error(errorData.error || `Error ${response.status}: ${response.statusText}`);
+      }
+      
+      const result = await response.json();
+      
+      this.showNotification(
+        '✅ Publicación iniciada exitosamente. El deploy comenzará en unos momentos. Puedes ver el progreso en GitHub Actions.',
+        'success'
+      );
+      
+      // Opcional: Abrir GitHub Actions en una nueva pestaña
+      // TODO: Configurar el repositorio de GitHub
+      // const githubRepo = 'tu-usuario/tu-repo';
+      // if (githubRepo && githubRepo !== 'tu-usuario/tu-repo') {
+      //   setTimeout(() => {
+      //     window.open(`https://github.com/${githubRepo}/actions`, '_blank');
+      //   }, 2000);
+      // }
+      
+    } catch (error) {
+      console.error('Error al publicar:', error);
+      this.showNotification(
+        `❌ Error al publicar: ${error.message}. Verifica que la Cloud Function esté desplegada.`,
+        'error'
+      );
+    } finally {
+      // Restaurar botón
+      publishBtn.disabled = false;
+      publishBtn.innerHTML = originalText;
     }
   }
 }

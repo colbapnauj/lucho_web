@@ -236,10 +236,10 @@ function copyRecursive(src, dest) {
       
       // Ignorar ciertos archivos/directorios
       if (file === 'node_modules' || file === '.git' || file === 'dist' || 
-          file === 'service-account-key.json' || file === 'admin.html' ||
-          file === 'admin.js' || file === 'admin.css' || file.startsWith('.')) {
+          file === 'service-account-key.json' || file.startsWith('.')) {
         return;
       }
+      // NOTA: admin.html, admin.js, admin.css SÍ se copian para que el admin esté disponible
       
       copyRecursive(srcPath, destPath);
     });
@@ -282,6 +282,33 @@ async function buildDist() {
     copyFileSync(join(rootDir, 'script.js'), join(distDir, 'script.js'));
   }
   
+  // Copiar admin.html y sus assets
+  console.log('📦 Copiando archivos del admin...');
+  if (existsSync(join(rootDir, 'admin.html'))) {
+    copyFileSync(join(rootDir, 'admin.html'), join(distDir, 'admin.html'));
+  }
+  if (existsSync(join(rootDir, 'admin.js'))) {
+    copyFileSync(join(rootDir, 'admin.js'), join(distDir, 'admin.js'));
+  }
+  if (existsSync(join(rootDir, 'admin.css'))) {
+    copyFileSync(join(rootDir, 'admin.css'), join(distDir, 'admin.css'));
+  }
+  
+  // Copiar firebase-init.js (necesario para admin)
+  if (existsSync(join(rootDir, 'firebase-init.js'))) {
+    copyFileSync(join(rootDir, 'firebase-init.js'), join(distDir, 'firebase-init.js'));
+  }
+  
+  // Copiar firebase-config-cdn.js (necesario para admin)
+  if (existsSync(join(rootDir, 'firebase-config-cdn.js'))) {
+    copyFileSync(join(rootDir, 'firebase-config-cdn.js'), join(distDir, 'firebase-config-cdn.js'));
+  }
+  
+  // Copiar src/ (necesario para admin)
+  if (existsSync(join(rootDir, 'src'))) {
+    copyRecursive(join(rootDir, 'src'), join(distDir, 'src'));
+  }
+  
   // Copiar otros assets si existen
   const assetsToCopy = ['images', 'fonts', 'assets'];
   assetsToCopy.forEach(asset => {
@@ -292,23 +319,16 @@ async function buildDist() {
   });
   
   // Crear _redirects para Netlify (SPA)
-  writeFileSync(
-    join(distDir, '_redirects'),
-    '/*    /index.html   200'
-  );
-  
-  // Crear netlify.toml si no existe
-  const netlifyToml = `
-[build]
-  publish = "dist"
-  # command = "npm run build"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  // IMPORTANTE: Los redirects se procesan en orden, así que los específicos van primero
+  // Netlify sirve archivos estáticos automáticamente, pero los redirects ayudan con rutas
+  const redirectsContent = `# Redirects para SPA
+# Los archivos estáticos se sirven automáticamente por Netlify
+# Este redirect solo aplica a rutas que no son archivos estáticos
+/*    /index.html   200
 `;
-  writeFileSync(join(rootDir, 'netlify.toml'), netlifyToml);
+  writeFileSync(join(distDir, '_redirects'), redirectsContent);
+  
+  // NOTA: netlify.toml ya existe en el root y no debe sobrescribirse
   
   console.log('✅ Build completado exitosamente');
   console.log(`📁 Archivos generados en: ${distDir}`);
