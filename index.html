@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arquitecto - Landing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Custom Cursor -->
+    <div class="cursor-outer"></div>
+    <div class="cursor-inner"></div>
+    
+    <nav class="navbar">
+      <div class="navbar-container">
+        <!-- Logo a la izquierda -->
+        <div class="navbar-logo">
+          <span class="logo-text">ARQUITECTURA</span>
+        </div>
+
+        <!-- Menús en el centro -->
+        <div class="navbar-menu">
+          <div class="menu-item-wrapper">
+            <span class="menu-item">Proyectos</span>
+            <div class="submenu">
+              <a href="#residenciales" class="submenu-item">Residenciales</a>
+              <a href="#comerciales" class="submenu-item">Comerciales</a>
+            </div>
+            <span class="menu-separator">|</span>
+          </div>
+
+          <div class="menu-item-wrapper">
+            <span class="menu-item">Servicios</span>
+            <div class="submenu">
+              <a href="#diseno" class="submenu-item">Diseño Arquitectónico</a>
+              <a href="#planos" class="submenu-item">Planos</a>
+              <a href="#supervision" class="submenu-item">Supervisión</a>
+            </div>
+            <span class="menu-separator">|</span>
+          </div>
+
+          <div class="menu-item-wrapper">
+            <span class="menu-item">Nosotros</span>
+            <div class="submenu">
+              <a href="#historia" class="submenu-item">Nuestra Historia</a>
+              <a href="#equipo" class="submenu-item">Equipo</a>
+            </div>
+            <span class="menu-separator">|</span>
+          </div>
+
+          <div class="menu-item-wrapper">
+            <span class="menu-item">Portafolio</span>
+            <div class="submenu">
+              <a href="#obras-completadas" class="submenu-item">Obras Completadas</a>
+              <a href="#proyectos-curso" class="submenu-item">Proyectos en Curso</a>
+              <a href="#galeria" class="submenu-item">Galería</a>
+            </div>
+            <span class="menu-separator">|</span>
+          </div>
+
+          <div class="menu-item-wrapper">
+            <span class="menu-item">Contacto</span>
+            <div class="submenu">
+              <a href="#ubicacion" class="submenu-item">Ubicación</a>
+              <a href="#formulario" class="submenu-item">Formulario</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones a la derecha -->
+        <div class="navbar-actions">
+          <button class="btn btn-secondary">Iniciar Sesión</button>
+          <button class="btn btn-primary">Contactar</button>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="hero-image">
+          <img 
+            src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwyfHxhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzY4MzQ3Mzg2fDA&ixlib=rb-4.1.0&q=85" 
+            alt="Edificio de arquitectura moderna - Foto por Lance Anderson en Unsplash"
+            loading="eager"
+          />
+        </div>
+        <div class="hero-content">
+          <p class="hero-pretitle">Diseño Arquitectónico de Excelencia</p>
+          <h1 class="hero-title">ARQUITECTOS EN AREQUIPA</h1>
+          <div class="hero-actions">
+            <button class="btn btn-hero">CONTÁCTANOS</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Section -->
+      <section class="services">
+        <div class="services-container">
+          <div class="services-col-1">
+            <p class="services-header">| QUÉ HACEMOS</p>
+            <h1 class="services-title">Cotiza tu Proyecto de Arquitectura en Arequipa</h1>
+          </div>
+          <div class="services-col-2">
+            <p class="services-text">
+              Ofrecemos servicios integrales de arquitectura, desde el diseño conceptual hasta la supervisión de obra. Nuestro equipo de arquitectos especializados en Arequipa trabaja contigo para materializar tus ideas en proyectos arquitectónicos de excelencia.
+            </p>
+            <button class="btn btn-services">TRANSFORMA TU OFICINA</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Banner Section -->
+      <section class="banner">
+        <div class="banner-image">
+          <img 
+            src="https://images.unsplash.com/photo-1631334709265-83dcee08ba9d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBhcmNoaXRlY3R1cmUlMjBidWlsZGluZyUyMGRlc2lnbnxlbnwwfHx8fDE3NjgzNDg1MjB8MA&ixlib=rb-4.1.0&q=85" 
+            alt="Arquitectura moderna - Foto por Ryunosuke Kikuno en Unsplash"
+            loading="lazy"
+          />
+        </div>
+        <div class="banner-overlay"></div>
+        <div class="banner-text">DISEÑO INTELIGENTE</div>
+      </section>
+
+      <!-- Gallery Section -->
+      <section class="gallery">
+        <div class="gallery-container">
+          <div class="gallery-slide gallery-slide-active">
+            <img 
+              src="https://images.unsplash.com/photo-1623679799651-ad774745c6fa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwzfHxjb3dvcmtpbmclMjBzcGFjZSUyMG1vZGVybiUyMG9mZmljZXxlbnwwfHx8fDE3NjgzNDg5NDR8MA&ixlib=rb-4.1.0&q=85" 
+              alt="Espacio de coworking - Foto por TheStandingDesk en Unsplash"
+              loading="lazy"
+            />
+          </div>
+          <div class="gallery-slide">
+            <img 
+              src="https://images.unsplash.com/photo-1758448656987-cfae6bf225e4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwxfHxyZWNlcHRpb24lMjBsb2JieSUyMG1vZGVybnxlbnwwfHx8fDE3NjgzNDg5NDd8MA&ixlib=rb-4.1.0&q=85" 
+              alt="Recepción moderna - Foto por Aalo Lens en Unsplash"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Process Section -->
+      <section class="process">
+        <div class="process-container">
+          <!-- Primera fila -->
+          <div class="process-row-1">
+            <div class="process-col-1">
+              <span class="process-header">POR QUÉ ELEGIRNOS</span>
+              <h1 class="process-title">Nuestro Proceso de Arquitectura: Del Concepto a la Realidad</h1>
+            </div>
+            <div class="process-col-2">
+              <p class="process-description">
+                Nuestro método de trabajo se centra en entender a fondo tus objetivos para garantizar un resultado que supere tus expectativas, cumpliendo con los plazos y el presupuesto acordado.
+              </p>
+              <button class="btn btn-process">SOLICITA TU DIAGNOSTICO</button>
+            </div>
+          </div>
+
+          <!-- Segunda fila - Cards -->
+          <div class="process-row-2">
+            <div class="process-card">
+              <div class="process-card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="process-card-title">Análisis de Necesidades y Viabilidad</h3>
+              <p class="process-card-text">
+                Nuestra primera etapa consiste en definir los objetivos de tu proyecto, estudiar la viabilidad técnica y comercial del inmueble y verificar las normativas de construcción vigentes para trazar un plan director claro y efectivo.
+              </p>
+            </div>
+            <div class="process-card">
+              <div class="process-card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="process-card-title">Diseño Conceptual y Visualización (3D)</h3>
+              <p class="process-card-text">
+                Materializamos tus ideas en una propuesta de diseño coherente y potente. Con el uso de tecnología de renderizado 3D, te facilitamos una comprensión total del proyecto, permitiendo ajustar detalles de materiales y distribución para un resultado óptimo.
+              </p>
+            </div>
+            <div class="process-card">
+              <div class="process-card-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="process-card-title">Desarrollo de Planos Técnicos y Gestión de Obra</h3>
+              <p class="process-card-text">
+                Preparamos la documentación técnica final para todas las especialidades (estructuras, instalaciones eléctricas, sanitarias). Llevamos a cabo la tramitación de licencias y ofrecemos una gestión de construcción en sitio para controlar la calidad y la fidelidad al diseño.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects Section -->
+      <section class="projects">
+        <div class="projects-container">
+          <span class="projects-header">| PROYECTOS</span>
+          <h1 class="projects-title">Nuestros Proyectos Destacados</h1>
+          
+          <div class="projects-divider"></div>
+          
+          <div class="projects-carousel">
+            <div class="projects-carousel-wrapper">
+              <!-- Página 1 -->
+              <div class="projects-page projects-page-active">
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1765760046780-bcb36cce335e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwxfHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Torre Empresarial" />
+                  <h3 class="project-title">Torre Empresarial</h3>
+                  <p class="project-subtitle">Corporativo / 2023 / Lima</p>
+                </div>
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1766939514249-8408b9c8a68a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwyfHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Complejo Residencial" />
+                  <h3 class="project-title">Complejo Residencial</h3>
+                  <p class="project-subtitle">Residencial / 2022 / Arequipa</p>
+                </div>
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1765192775076-cb81f45b0fa5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwzfHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Centro Comercial" />
+                  <h3 class="project-title">Centro Comercial</h3>
+                  <p class="project-subtitle">Comercial / 2024 / Cusco</p>
+                </div>
+              </div>
+              
+              <!-- Página 2 -->
+              <div class="projects-page">
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1760331283499-abccea681c46?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHw0fHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Edificio Corporativo" />
+                  <h3 class="project-title">Edificio Corporativo</h3>
+                  <p class="project-subtitle">Corporativo / 2023 / Trujillo</p>
+                </div>
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1768321903661-87da7d2962b0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHw1fHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Residencia Moderna" />
+                  <h3 class="project-title">Residencia Moderna</h3>
+                  <p class="project-subtitle">Residencial / 2024 / Arequipa</p>
+                </div>
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1767122225720-1d11b6a7f79f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHw2fHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Torre Residencial" />
+                  <h3 class="project-title">Torre Residencial</h3>
+                  <p class="project-subtitle">Residencial / 2023 / Lima</p>
+                </div>
+              </div>
+              
+              <!-- Página 3 -->
+              <div class="projects-page">
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1759931373726-298a1df1960c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHw3fHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Complejo Empresarial" />
+                  <h3 class="project-title">Complejo Empresarial</h3>
+                  <p class="project-subtitle">Corporativo / 2024 / Arequipa</p>
+                </div>
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1768321903466-313ed74cbb62?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHw4fHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Edificio Mixto" />
+                  <h3 class="project-title">Edificio Mixto</h3>
+                  <p class="project-subtitle">Mixto / 2023 / Lima</p>
+                </div>
+                <div class="project-item">
+                  <img src="https://images.unsplash.com/photo-1759044814269-f7ba07c97b5a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHw5fHxhcmNoaXRlY3R1cmFsJTIwcHJvamVjdCUyMGJ1aWxkaW5nJTIwY29uc3RydWN0aW9ufGVufDB8fHx8MTc2ODM1MDE1Mnww&ixlib=rb-4.1.0&q=85" alt="Torre Corporativa" />
+                  <h3 class="project-title">Torre Corporativa</h3>
+                  <p class="project-subtitle">Corporativo / 2024 / Cusco</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Indicadores -->
+            <div class="projects-indicators">
+              <button class="projects-indicator projects-indicator-active" data-page="0"></button>
+              <button class="projects-indicator" data-page="1"></button>
+              <button class="projects-indicator" data-page="2"></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section class="testimonials">
+        <div class="testimonials-container">
+          <div class="testimonials-header">
+            <i class="fas fa-quote-left testimonials-quote"></i>
+            <h5 class="testimonials-title">LO QUE DICEN NUESTROS CLIENTES</h5>
+          </div>
+          
+          <div class="testimonials-grid">
+            <div class="testimonial-item testimonial-item-side">
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=crop&w=100&h=100" alt="Carlos Mendoza" />
+                </div>
+                <div class="testimonial-info">
+                  <h4 class="testimonial-name">CARLOS MENDOZA</h4>
+                  <p class="testimonial-position">Director General</p>
+                </div>
+              </div>
+              <p class="testimonial-text">«El equipo superó nuestras expectativas. El proyecto se entregó a tiempo y el diseño final es excepcional. Recomendamos totalmente sus servicios.»</p>
+            </div>
+            
+            <div class="testimonial-item">
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=crop&w=100&h=100" alt="María González" />
+                </div>
+                <div class="testimonial-info">
+                  <h4 class="testimonial-name">MARÍA GONZÁLEZ</h4>
+                  <p class="testimonial-position">Gerente de Proyectos</p>
+                </div>
+              </div>
+              <p class="testimonial-text">«Profesionalismo y atención al detalle en cada etapa. El proceso fue transparente y el resultado final superó nuestras expectativas.»</p>
+            </div>
+            
+            <div class="testimonial-item testimonial-item-side">
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=crop&w=100&h=100" alt="Roberto Silva" />
+                </div>
+                <div class="testimonial-info">
+                  <h4 class="testimonial-name">ROBERTO SILVA</h4>
+                  <p class="testimonial-position">CEO Empresarial</p>
+                </div>
+              </div>
+              <p class="testimonial-text">«Excelente trabajo desde el diseño conceptual hasta la entrega. El equipo demostró gran conocimiento técnico y creatividad.»</p>
+            </div>
+            
+            <div class="testimonial-item testimonial-item-side">
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=crop&w=100&h=100" alt="Ana Martínez" />
+                </div>
+                <div class="testimonial-info">
+                  <h4 class="testimonial-name">ANA MARTÍNEZ</h4>
+                  <p class="testimonial-position">Arquitecta Residencial</p>
+                </div>
+              </div>
+              <p class="testimonial-text">«Trabajo impecable y comunicación constante. El proyecto refleja perfectamente nuestra visión y se ajustó a nuestro presupuesto.»</p>
+            </div>
+            
+            <div class="testimonial-item">
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=crop&w=100&h=100" alt="Luis Ramírez" />
+                </div>
+                <div class="testimonial-info">
+                  <h4 class="testimonial-name">LUIS RAMÍREZ</h4>
+                  <p class="testimonial-position">Inversionista</p>
+                </div>
+              </div>
+              <p class="testimonial-text">«Increíble experiencia de principio a fin. La calidad del diseño y la ejecución es de primer nivel. Definitivamente volveremos a trabajar con ellos.»</p>
+            </div>
+            
+            <div class="testimonial-item testimonial-item-side">
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?crop=entropy&cs=tinysrgb&fit=crop&w=100&h=100" alt="Patricia López" />
+                </div>
+                <div class="testimonial-info">
+                  <h4 class="testimonial-name">PATRICIA LÓPEZ</h4>
+                  <p class="testimonial-position">Directora Comercial</p>
+                </div>
+              </div>
+              <p class="testimonial-text">«El mejor equipo de arquitectura con el que hemos trabajado. Su enfoque profesional y creativo transformó completamente nuestro espacio.»</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="faq">
+        <div class="faq-container">
+          <span class="faq-header">| Preguntas Frecuentes sobre Nuestros Servicios</span>
+          <h1 class="faq-title">Tus dudas, resueltas</h1>
+          
+          <div class="faq-list">
+            <div class="faq-item faq-item-active">
+              <div class="faq-question">
+                <h3 class="faq-question-text">¿Cuánto tiempo toma completar un proyecto arquitectónico?</h3>
+                <i class="fas fa-chevron-up faq-icon faq-icon-up"></i>
+                <i class="fas fa-chevron-down faq-icon faq-icon-down" style="display: none;"></i>
+              </div>
+              <div class="faq-answer">
+                <p>El tiempo de ejecución varía según la complejidad y el alcance del proyecto. Un proyecto residencial pequeño puede tomar entre 3 a 6 meses, mientras que proyectos comerciales o corporativos más grandes pueden extenderse de 6 meses a 2 años. Durante la consulta inicial, proporcionamos un cronograma detallado basado en tus necesidades específicas.</p>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3 class="faq-question-text">¿Qué incluye el servicio de diseño arquitectónico?</h3>
+                <i class="fas fa-chevron-up faq-icon faq-icon-up" style="display: none;"></i>
+                <i class="fas fa-chevron-down faq-icon faq-icon-down"></i>
+              </div>
+              <div class="faq-answer">
+                <p>Nuestro servicio de diseño arquitectónico incluye: análisis de necesidades y viabilidad, diseño conceptual con visualización 3D, desarrollo de planos técnicos para todas las especialidades (estructuras, instalaciones eléctricas, sanitarias), tramitación de licencias y gestión de construcción en sitio. Trabajamos contigo en cada etapa para garantizar que el resultado final supere tus expectativas.</p>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3 class="faq-question-text">¿Trabajan en proyectos fuera de Arequipa?</h3>
+                <i class="fas fa-chevron-up faq-icon faq-icon-up" style="display: none;"></i>
+                <i class="fas fa-chevron-down faq-icon faq-icon-down"></i>
+              </div>
+              <div class="faq-answer">
+                <p>Sí, trabajamos en proyectos en todo el Perú. Aunque nuestra base está en Arequipa, tenemos experiencia en proyectos en Lima, Cusco, Trujillo y otras ciudades. Para proyectos fuera de Arequipa, coordinamos visitas periódicas y mantenemos comunicación constante para asegurar la calidad y el cumplimiento de los plazos establecidos.</p>
+              </div>
+            </div>
+            
+            <div class="faq-item">
+              <div class="faq-question">
+                <h3 class="faq-question-text">¿Cómo funciona el proceso de cotización?</h3>
+                <i class="fas fa-chevron-up faq-icon faq-icon-up" style="display: none;"></i>
+                <i class="fas fa-chevron-down faq-icon faq-icon-down"></i>
+              </div>
+              <div class="faq-answer">
+                <p>El proceso de cotización comienza con una consulta inicial donde discutimos tus necesidades, objetivos y presupuesto. Luego realizamos un análisis preliminar del proyecto y te proporcionamos una propuesta detallada que incluye alcance de trabajo, cronograma y costos. La cotización es transparente y sin costos ocultos. Puedes solicitar tu diagnóstico gratuito a través de nuestro formulario de contacto.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Cards Section -->
+      <section class="services-cards">
+        <div class="services-cards-container">
+          <div class="service-card">
+            <div class="service-card-icon-wrapper">
+              <i class="fas fa-plus service-card-icon service-card-icon-plus"></i>
+              <i class="fas fa-minus service-card-icon service-card-icon-minus" style="display: none;"></i>
+            </div>
+            <div class="service-card-content">
+              <h3 class="service-card-title">Diseño de Oficinas Corporativas y Workspaces</h3>
+              <p class="service-card-description">Creamos entornos de trabajo que fomentan la colaboración, reflejan la cultura de tu empresa y mejoran la productividad de tu equipo.</p>
+            </div>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-card-icon-wrapper">
+              <i class="fas fa-plus service-card-icon service-card-icon-plus"></i>
+              <i class="fas fa-minus service-card-icon service-card-icon-minus" style="display: none;"></i>
+            </div>
+            <div class="service-card-content">
+              <h3 class="service-card-title">Arquitectura Comercial y Diseño de Tiendas (Retail)</h3>
+              <p class="service-card-description">Desarrollamos espacios comerciales y locales que atraen clientes, optimizan la operatividad y reflejan la identidad de tu marca para maximizar las ventas.</p>
+            </div>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-card-icon-wrapper">
+              <i class="fas fa-plus service-card-icon service-card-icon-plus"></i>
+              <i class="fas fa-minus service-card-icon service-card-icon-minus" style="display: none;"></i>
+            </div>
+            <div class="service-card-content">
+              <h3 class="service-card-title">Proyectos de Remodelación y Acondicionamiento (Fit-Out)</h3>
+              <p class="service-card-description">Transformamos y modernizamos locales u oficinas existentes para alinearlos con nuevas estrategias de negocio, mejorar su funcionalidad y potenciar su valor comercial.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Banner Section -->
+      <section class="cta-banner">
+        <div class="cta-banner-container">
+          <div class="cta-banner-content">
+            <h1 class="cta-banner-title">¡Transforma tu oficina!</h1>
+            <p class="cta-banner-text">Descubre cómo un diseño de oficinas pensado con datos y desarrollado con pasión, puede revolucionar tu empresa.</p>
+            <button class="btn btn-cta">HABLEMOS</button>
+          </div>
+          <div class="cta-banner-pattern">
+            <div class="infinity-pattern"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Map Section -->
+      <section class="map-section">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121849.33760978923!2d-71.5373509!3d-16.4090474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91424a487785b9b3%3A0x1c1776c3b5b8c8e7!2sArequipa%2C%20Peru!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus" 
+          width="100%" 
+          height="320" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Ubicación Arequipa">
+        </iframe>
+      </section>
+
+      <!-- Arequipa Info Section -->
+      <section class="arequipa-info">
+        <div class="arequipa-info-container">
+          <div class="arequipa-col-1">
+            <img 
+              src="https://images.unsplash.com/photo-1766299043898-5d7bd8b822d7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwxfHxBcmVxdWlwYSUyMFBlcnUlMjBjaXR5JTIwYXJjaGl0ZWN0dXJlfGVufDB8fHx8MTc2ODM1NDA2MXww&ixlib=rb-4.1.0&q=85" 
+              alt="Arequipa, Perú"
+              class="arequipa-image"
+            />
+          </div>
+          
+          <div class="arequipa-col-2">
+            <h2 class="arequipa-header">Arequipa</h2>
+            <div class="arequipa-data-card">
+              <div class="arequipa-data-item">
+                <span class="arequipa-data-label">Departamento:</span>
+                <span class="arequipa-data-value">Arequipa</span>
+              </div>
+              <div class="arequipa-data-item">
+                <span class="arequipa-data-label">Provincia:</span>
+                <span class="arequipa-data-value">Arequipa</span>
+              </div>
+              
+              <div class="arequipa-divider"></div>
+              
+              <div class="arequipa-data-item">
+                <span class="arequipa-data-label">Población:</span>
+                <span class="arequipa-data-value">Aprox. 1,606,000 (2024)</span>
+              </div>
+              <div class="arequipa-data-item">
+                <span class="arequipa-data-label">Códigos postales:</span>
+                <span class="arequipa-data-value">04001, 04002, 04011</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="arequipa-col-3">
+            <p class="arequipa-description">
+              Arequipa, conocida como la "Ciudad Blanca" por sus impresionantes edificios construidos con sillar, es una de las ciudades más importantes del sur del Perú. Rodeada por tres majestuosos volcanes, la ciudad combina una rica historia colonial con una arquitectura única que la ha convertido en Patrimonio de la Humanidad por la UNESCO. Su centro histórico alberga joyas arquitectónicas como el Monasterio de Santa Catalina y la Basílica Catedral, mientras que su crecimiento moderno la posiciona como un importante centro económico y cultural de la región.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Localities Section -->
+      <section class="localities">
+        <div class="localities-container">
+          <div class="localities-col-1">
+            <span class="localities-header">| LOCALIDADES</span>
+            <h1 class="localities-title">Explora Nuestras<br>Ciudades y Regiones</h1>
+            <p class="localities-description">
+              Nuestra cobertura en Perú incluye Trujillo, Piura, Chiclayo, Cusco, Iquitos y Arequipa. En cada ciudad diseñamos y construimos espacios a medida —oficinas, locales comerciales, hospitality, industrial y salud— combinando funcionalidad y estética para impulsar tus proyectos.
+            </p>
+            <button class="btn btn-localities">TRANSFORMA TU OFICINA</button>
+          </div>
+          
+          <div class="localities-col-2">
+            <div class="localities-carousel">
+              <div class="localities-carousel-wrapper">
+                <!-- Página 1 -->
+                <div class="localities-page localities-page-active">
+                  <div class="locality-card">
+                    <i class="fas fa-map-marker-alt locality-icon"></i>
+                    <h2 class="locality-title">Trujillo</h2>
+                    <p class="locality-text">Con una presencia sólida en la capital de La Libertad, desarrollamos proyectos arquitectónicos que reflejan el dinamismo económico de la región norte del Perú.</p>
+                  </div>
+                  <div class="locality-card">
+                    <i class="fas fa-map-marker-alt locality-icon"></i>
+                    <h2 class="locality-title">Piura</h2>
+                    <p class="locality-text">Nuestro equipo en Piura se especializa en proyectos comerciales y residenciales que aprovechan el clima y la cultura local para crear espacios únicos y funcionales.</p>
+                  </div>
+                </div>
+                
+                <!-- Página 2 -->
+                <div class="localities-page">
+                  <div class="locality-card">
+                    <i class="fas fa-map-marker-alt locality-icon"></i>
+                    <h2 class="locality-title">Chiclayo</h2>
+                    <p class="locality-text">En Chiclayo, combinamos tradición y modernidad para diseñar espacios que respetan el patrimonio cultural mientras incorporan soluciones arquitectónicas contemporáneas.</p>
+                  </div>
+                  <div class="locality-card">
+                    <i class="fas fa-map-marker-alt locality-icon"></i>
+                    <h2 class="locality-title">Cusco</h2>
+                    <p class="locality-text">Nuestra presencia en la capital histórica del Perú nos permite crear proyectos que integran la arquitectura incaica con diseños modernos, respetando siempre el entorno patrimonial.</p>
+                  </div>
+                </div>
+                
+                <!-- Página 3 -->
+                <div class="localities-page">
+                  <div class="locality-card">
+                    <i class="fas fa-map-marker-alt locality-icon"></i>
+                    <h2 class="locality-title">Iquitos</h2>
+                    <p class="locality-text">En la selva peruana, adaptamos nuestros diseños a las condiciones climáticas y culturales únicas de Iquitos, creando espacios sostenibles y funcionales.</p>
+                  </div>
+                  <div class="locality-card">
+                    <i class="fas fa-map-marker-alt locality-icon"></i>
+                    <h2 class="locality-title">Arequipa</h2>
+                    <p class="locality-text">Como base principal, Arequipa es donde desarrollamos nuestros proyectos más emblemáticos, combinando la arquitectura tradicional con innovación contemporánea.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Indicadores -->
+              <div class="localities-indicators">
+                <button class="localities-indicator localities-indicator-active" data-page="0"></button>
+                <button class="localities-indicator" data-page="1"></button>
+                <button class="localities-indicator" data-page="2"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-col footer-col-1">
+          <div class="footer-row-1">
+            <h3 class="footer-title">Sedes</h3>
+          </div>
+          <div class="footer-row-2">
+            <div class="footer-location">
+              <h4 class="footer-location-title">Perú</h4>
+              <p class="footer-location-address">Av. Ejemplo 123, Arequipa, Perú</p>
+              <p class="footer-location-email">contacto@arquitectura.com</p>
+              <button class="btn btn-footer">Contacto</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-col footer-col-2">
+          <div class="footer-row-1">
+            <h3 class="footer-title">Legal</h3>
+          </div>
+          <div class="footer-row-2">
+            <nav class="footer-nav">
+              <a href="#terminos" class="footer-link">Términos y Condiciones</a>
+              <a href="#privacidad" class="footer-link">Política de Privacidad</a>
+              <a href="#cookies" class="footer-link">Política de Cookies</a>
+              <a href="#aviso" class="footer-link">Aviso Legal</a>
+            </nav>
+          </div>
+        </div>
+        
+        <div class="footer-col footer-col-3">
+          <div class="footer-row-1">
+            <h3 class="footer-title">Síguenos</h3>
+          </div>
+          <div class="footer-row-2">
+            <div class="footer-social">
+              <a href="#" class="footer-social-link" aria-label="Facebook">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="footer-social-link" aria-label="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a href="#" class="footer-social-link" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-col footer-col-4">
+          <div class="footer-infinity-pattern">
+            <div class="infinity-pattern-footer"></div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/51999999999" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="script.js"></script>
+  </body>
+</html>
