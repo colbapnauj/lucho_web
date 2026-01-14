@@ -52,11 +52,12 @@ jobs:
           echo "📄 Verificando index.html:"
           test -f dist/index.html && echo "✅ index.html existe" || echo "❌ index.html no existe"
       
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+      
       - name: Deploy to Netlify
-        uses: netlify/actions/cli@master
+        run: |
+          netlify deploy --dir=dist --prod --message="Deploy from GitHub Actions"
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        with:
-          args: deploy --dir=dist --prod
-          secrets: ${{ secrets.NETLIFY_AUTH_TOKEN }}
