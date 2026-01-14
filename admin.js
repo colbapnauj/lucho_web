@@ -4,7 +4,37 @@ import { ContentService } from './src/services/ContentService.js';
 import { ProjectModel } from './src/models/ProjectModel.js';
 import { TestimonialModel } from './src/models/TestimonialModel.js';
 import { FAQModel } from './src/models/FAQModel.js';
-import { uploadImageToCloudinary } from './src/utils/cloudinary-config.js';
+
+// Cache para el módulo de Cloudinary (cargado dinámicamente)
+// TODO: Mover a Cloud Functions para producción
+// Nota: El archivo cloudinary-config.js está en .gitignore por seguridad
+let cloudinaryModuleCache = null;
+
+// Función helper para subir imágenes
+// Usa Cloudinary si está disponible (solo en local), sino muestra un mensaje
+async function uploadImageToCloudinary(file) {
+  // Cargar el módulo dinámicamente si no está en cache
+  if (!cloudinaryModuleCache) {
+    try {
+      cloudinaryModuleCache = await import('./src/utils/cloudinary-config.js');
+    } catch (error) {
+      // El archivo no existe (normal en producción)
+      cloudinaryModuleCache = { unavailable: true };
+      console.warn('⚠️ Cloudinary config no disponible. La subida de imágenes funcionará solo en local o cuando se implemente en Functions.');
+    }
+  }
+  
+  // Si está disponible, usar la función
+  if (cloudinaryModuleCache && !cloudinaryModuleCache.unavailable && cloudinaryModuleCache.uploadImageToCloudinary) {
+    return await cloudinaryModuleCache.uploadImageToCloudinary(file);
+  }
+  
+  // Si no está disponible, retornar error informativo
+  return {
+    success: false,
+    error: 'Cloudinary no configurado. Por favor, configura src/utils/cloudinary-config.js en local o implementa la función en Cloud Functions.'
+  };
+}
 
 class AdminController {
   constructor() {

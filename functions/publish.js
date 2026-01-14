@@ -62,23 +62,59 @@ exports.publish = functions.https.onRequest(async (req, res) => {
       });
     }
     
+    
+    // Verificar que el repositorio existe y es accesible
+    console.log(`🔍 Verificando acceso al repositorio: ${githubOwner}/${githubRepo}`);
+    const repoCheckResponse = await makeGitHubRequest(
+      `https://api.github.com/repos/${githubOwner}/${githubRepo}`,
+      'GET',
+      githubToken
+    );
+    
+    if (!repoCheckResponse.ok) {
+      const errorData = await repoCheckResponse.text();
+      console.error(`❌ Error al verificar repositorio: ${repoCheckResponse.status} - ${errorData}`);
+      throw new Error(`Repositorio no encontrado o sin acceso: ${githubOwner}/${githubRepo}. Verifica que el repositorio existe y el token tiene permisos.`);
+    }
+    
+    const repoData = await repoCheckResponse.json();
+    console.log(`✅ Repositorio verificado: ${repoData.full_name}`);
+    
     // Crear un commit vacío usando GitHub API
     // Esto disparará automáticamente GitHub Actions
     const commitMessage = `🚀 Publicación automática desde CMS - ${new Date().toISOString()}`;
     
     // Paso 1: Obtener el SHA del commit actual de la rama
-    const getRefResponse = await makeGitHubRequest(
+    console.log(`🔍 Obteniendo referencia de la rama: ${githubBranch}`);
+    let getRefResponse = await makeGitHubRequest(
       `https://api.github.com/repos/${githubOwner}/${githubRepo}/git/refs/heads/${githubBranch}`,
       'GET',
       githubToken
     );
     
+    // Si la rama 'main' no existe, intentar con 'master'
+    if (!getRefResponse.ok && getRefResponse.status === 404 && githubBranch === 'main') {
+      console.log(`⚠️ Rama 'main' no encontrada, intentando con 'master'...`);
+      getRefResponse = await makeGitHubRequest(
+        `https://api.github.com/repos/${githubOwner}/${githubRepo}/git/refs/heads/master`,
+        'GET',
+        githubToken
+      );
+      
+      if (getRefResponse.ok) {
+        githubBranch = 'master';
+      }
+    }
+    
     if (!getRefResponse.ok) {
-      throw new Error(`Error al obtener referencia: ${getRefResponse.status}`);
+      const errorData = await getRefResponse.text();
+      console.error(`❌ Error al obtener referencia: ${getRefResponse.status} - ${errorData}`);
+      throw new Error(`Error al obtener referencia de la rama '${githubBranch}': ${getRefResponse.status} - ${errorData}`);
     }
     
     const refData = await getRefResponse.json();
     const currentSha = refData.object.sha;
+    console.log(`✅ SHA actual obtenido: ${currentSha.substring(0, 7)}`);
     
     // Paso 2: Obtener el árbol del commit actual
     const getCommitResponse = await makeGitHubRequest(
@@ -95,6 +131,10 @@ exports.publish = functions.https.onRequest(async (req, res) => {
     const treeSha = commitData.tree.sha;
     
     // Paso 3: Crear un nuevo commit vacío (usando el mismo árbol)
+    // Formato de fecha para GitHub: ISO 8601 con formato específico
+    const now = new Date();
+    const gitDate = now.toISOString().replace(/\.\d{3}Z$/, 'Z'); // Remover milisegundos si es necesario
+    
     const newCommitData = {
       message: commitMessage,
       tree: treeSha,
@@ -102,9 +142,18 @@ exports.publish = functions.https.onRequest(async (req, res) => {
       author: {
         name: 'CMS Bot',
         email: 'cms@lucho-web.com',
-        date: new Date().toISOString()
+        date: gitDate
+      },
+      committer: {
+        name: 'CMS Bot',
+        email: 'cms@lucho-web.com',
+        date: gitDate
       }
     };
+    
+    console.log(`🔨 Creando commit vacío...`);
+    console.log(`   Tree SHA: ${treeSha.substring(0, 7)}`);
+    console.log(`   Parent SHA: ${currentSha.substring(0, 7)}`);
     
     const createCommitResponse = await makeGitHubRequest(
       `https://api.github.com/repos/${githubOwner}/${githubRepo}/git/commits`,
@@ -115,7 +164,20 @@ exports.publish = functions.https.onRequest(async (req, res) => {
     
     if (!createCommitResponse.ok) {
       const errorText = await createCommitResponse.text();
-      throw new Error(`Error al crear commit: ${createCommitResponse.status} - ${errorText}`);
+      let errorMessage = `Error al crear commit: ${createCommitResponse.status}`;
+      
+      try {
+        const errorJson = JSON.parse(errorText);
+        errorMessage += ` - ${errorJson.message || errorText}`;
+        if (errorJson.errors) {
+          errorMessage += ` (Errores: ${JSON.stringify(errorJson.errors)})`;
+        }
+      } catch (e) {
+        errorMessage += ` - ${errorText}`;
+      }
+      
+      console.error(`❌ ${errorMessage}`);
+      throw new Error(errorMessage);
     }
     
     const newCommit = await createCommitResponse.json();
@@ -175,7 +237,8 @@ function makeGitHubRequest(url, method = 'GET', token, data = null) {
       headers: {
         'Authorization': `token ${token}`,
         'User-Agent': 'Firebase-Cloud-Function',
-        'Accept': 'application/vnd.github.v3+json'
+        'Accept': 'application/vnd.github.v3+json',
+        'X-GitHub-Api-Version': '2022-11-28'
       }
     };
     
