@@ -318,19 +318,9 @@ async function buildDist() {
     }
   });
   
-  // Crear _redirects para Netlify (SPA)
-  // IMPORTANTE: Netlify sirve archivos estáticos automáticamente
-  // El redirect /* solo aplica cuando el archivo NO existe físicamente
-  // Los archivos con extensiones (.js, .css, etc.) se sirven automáticamente
-  // Solo redirigimos rutas que NO son archivos estáticos a index.html (SPA)
-  const redirectsContent = `# Redirects para SPA
-# Los archivos estáticos se sirven automáticamente por Netlify
-# Este redirect solo aplica a rutas que no son archivos estáticos
-/*    /index.html   200
-`;
-  writeFileSync(join(distDir, '_redirects'), redirectsContent);
-  
-  // NOTA: netlify.toml ya existe en el root y no debe sobrescribirse
+  // Sitio estático - No se necesitan redirects
+  // Netlify sirve los archivos estáticos directamente
+  // No crear _redirects para evitar problemas con módulos ES6
   
   console.log('✅ Build completado exitosamente');
   console.log(`📁 Archivos generados en: ${distDir}`);

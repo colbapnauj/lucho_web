@@ -6,15 +6,5 @@
   # command comentado - el build se hace en GitHub Actions
   # command = "npm run build"
 
-# IMPORTANTE: Netlify sirve archivos estáticos automáticamente
-# El redirect /* solo aplica cuando el archivo NO existe físicamente
-# Los archivos con extensiones (.js, .css, etc.) se sirven automáticamente
-# Solo redirigimos rutas que NO son archivos estáticos a index.html (SPA)
-
-# Redirigir todo lo demás a index.html (SPA)
-# Nota: force = false significa que NO fuerza el redirect si el archivo existe
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
+# Sitio estático - No se necesitan redirects
+# Netlify sirve los archivos estáticos directamente
