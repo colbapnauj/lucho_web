@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase config (contiene credenciales)
+firebase-config.js
+
+# Cloudinary config (contiene credenciales)
+src/utils/cloudinary-config.js
+
+# Service Account Key (contiene credenciales sensibles)
+service-account-key.json
+
+# Build output
+dist/
+
+# Local Netlify folder
+.netlify

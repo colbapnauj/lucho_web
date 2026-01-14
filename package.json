@@ -1,0 +1,23 @@
+{
+  "name": "lucho-web-cms",
+  "version": "1.0.0",
+  "description": "CMS para landing page de arquitectura",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx http-server . -p 8080 -c-1",
+    "build": "node scripts/build-static.js",
+    "build:watch": "node scripts/build-static.js --watch",
+    "create-admin": "node scripts/create-admin-user.js",
+    "claims": "node scripts/manage-user-claims.js"
+  },
+  "keywords": ["cms", "firebase", "architecture"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^10.7.1"
+  },
+  "devDependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}

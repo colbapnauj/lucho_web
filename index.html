@@ -93,19 +93,21 @@
 
     <main>
       <!-- Hero Section -->
-      <section class="hero">
+      <section class="hero" id="hero-section" data-cms-section="hero">
         <div class="hero-image">
           <img 
+            id="hero-image"
             src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTcwMDR8MHwxfHNlYXJjaHwyfHxhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzY4MzQ3Mzg2fDA&ixlib=rb-4.1.0&q=85" 
             alt="Edificio de arquitectura moderna - Foto por Lance Anderson en Unsplash"
             loading="eager"
+            data-cms-field="imageUrl"
           />
         </div>
         <div class="hero-content">
-          <p class="hero-pretitle">Diseño Arquitectónico de Excelencia</p>
-          <h1 class="hero-title">ARQUITECTOS EN AREQUIPA</h1>
+          <p class="hero-pretitle" id="hero-pretitle" data-cms-field="pretitle">Diseño Arquitectónico de Excelencia</p>
+          <h1 class="hero-title" id="hero-title" data-cms-field="title">ARQUITECTOS EN AREQUIPA</h1>
           <div class="hero-actions">
-            <button class="btn btn-hero">CONTÁCTANOS</button>
+            <button class="btn btn-hero" id="hero-button" data-cms-field="buttonText">CONTÁCTANOS</button>
           </div>
         </div>
       </section>
@@ -682,6 +684,12 @@
     <a href="https://wa.me/51999999999" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
       <i class="fab fa-whatsapp"></i>
     </a>
+
+    <!-- Firebase SDK desde CDN -->
+    <script type="module" src="firebase-init.js"></script>
+    
+    <!-- Load Content from Firebase -->
+    <script type="module" src="load-content.js"></script>
 
     <script src="script.js"></script>
   </body>
