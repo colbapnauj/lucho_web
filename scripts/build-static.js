@@ -301,7 +301,7 @@ async function buildDist() {
   const netlifyToml = `
 [build]
   publish = "dist"
-  command = "npm run build"
+  # command = "npm run build"
 
 [[redirects]]
   from = "/*"
