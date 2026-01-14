@@ -19,7 +19,7 @@ export class ContentService {
       servicesCards: new FirebaseService(`${this.basePath}/servicesCards/items`),
       ctaBanner: new FirebaseService(`${this.basePath}/ctaBanner`),
       arequipaInfo: new FirebaseService(`${this.basePath}/arequipaInfo`),
-      localities: new FirebaseService(`${this.basePath}/localities/cities`),
+      localities: new FirebaseService(`${this.basePath}/localities/items`),
       footer: new FirebaseService(`${this.basePath}/footer`),
       navbar: new FirebaseService(`${this.basePath}/navbar`)
     };
@@ -33,16 +33,48 @@ export class ContentService {
       const content = {};
       for (const [key, service] of Object.entries(this.services)) {
         if (key === 'projects' || key === 'testimonials' || key === 'faq' || 
-            key === 'servicesCards' || key === 'localities') {
-          // Estos son arrays
-          content[key] = await service.getAll() || [];
+            key === 'servicesCards' || key === 'localities' || key === 'gallery') {
+          // Estos son arrays - Firebase los devuelve como objetos con items
+          const data = await service.getAll();
+          if (data && typeof data === 'object' && !Array.isArray(data)) {
+            // Si es un objeto, puede tener una estructura { items: {...} } o ser directamente los items
+            if (data.items) {
+              content[key] = { items: data.items };
+            } else {
+              content[key] = { items: data };
+            }
+          } else if (Array.isArray(data)) {
+            // Si es un array, convertirlo a objeto con items
+            const itemsObj = {};
+            data.forEach((item, index) => {
+              itemsObj[item.id || `item_${index}`] = item;
+            });
+            content[key] = { items: itemsObj };
+          } else {
+            content[key] = { items: {} };
+          }
+        } else if (key === 'navbar') {
+          // Navbar tiene estructura especial: logoText + items
+          const navbarData = await service.getAll();
+          const itemsService = new FirebaseService(`${this.basePath}/navbar/items`);
+          const itemsData = await itemsService.getAll();
+          
+          content[key] = {
+            logoText: navbarData?.logoText || '',
+            items: (itemsData && typeof itemsData === 'object' && !Array.isArray(itemsData)) ? itemsData : {}
+          };
         } else {
           // Estos son objetos simples
           const data = await service.getAll();
           if (data && typeof data === 'object' && !Array.isArray(data)) {
-            content[key] = Object.values(data)[0] || data;
+            // Si tiene estructura anidada, tomar el valor directo
+            if (Object.keys(data).length === 1 && data[Object.keys(data)[0]]) {
+              content[key] = data[Object.keys(data)[0]];
+            } else {
+              content[key] = data;
+            }
           } else {
-            content[key] = data;
+            content[key] = data || {};
           }
         }
       }

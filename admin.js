@@ -1,6 +1,7 @@
 // Admin Controller
 import { AuthService } from './src/services/AuthService.js';
 import { ContentService } from './src/services/ContentService.js';
+import { FirebaseService } from './src/services/FirebaseService.js';
 import { ProjectModel } from './src/models/ProjectModel.js';
 import { TestimonialModel } from './src/models/TestimonialModel.js';
 import { FAQModel } from './src/models/FAQModel.js';
@@ -284,6 +285,16 @@ class AdminController {
       this.fillForm('services', this.currentContent.services);
     }
     
+    // Render Banner
+    if (this.currentContent.banner) {
+      this.fillForm('banner', this.currentContent.banner);
+    }
+    
+    // Render Gallery
+    if (this.currentContent.gallery) {
+      this.renderGalleryList(this.currentContent.gallery);
+    }
+    
     // Render Projects
     if (this.currentContent.projects) {
       this.renderProjectsList(this.currentContent.projects);
@@ -308,6 +319,11 @@ class AdminController {
     if (this.currentContent.footer) {
       this.fillForm('footer', this.currentContent.footer);
     }
+    
+    // Render Navbar
+    if (this.currentContent.navbar) {
+      this.renderNavbar(this.currentContent.navbar);
+    }
   }
   
   /**
@@ -315,16 +331,35 @@ class AdminController {
    */
   fillForm(sectionName, data) {
     const form = document.querySelector(`form[data-section="${sectionName}"]`);
-    if (!form) return;
+    if (!form) {
+      console.warn(`⚠️  Formulario no encontrado para sección: ${sectionName}`);
+      return;
+    }
+    
+    if (!data || typeof data !== 'object') {
+      console.warn(`⚠️  Datos inválidos para sección: ${sectionName}`, data);
+      return;
+    }
+    
+    console.log(`📝 Llenando formulario de ${sectionName} con datos:`, data);
     
     Object.keys(data).forEach(key => {
       const input = form.querySelector(`[name="${key}"]`);
       if (input) {
-        input.value = data[key];
-        // Si es una imagen, mostrar preview
-        if (key.includes('image') || key.includes('Image') || key.includes('Url')) {
-          this.updateImagePreview(input.name, data[key]);
+        const value = data[key];
+        if (value !== null && value !== undefined && value !== '') {
+          input.value = value;
+          console.log(`  ✅ Campo ${key} = ${value}`);
+          
+          // Si es una imagen, mostrar preview
+          if (key.includes('image') || key.includes('Image') || key.includes('Url')) {
+            this.updateImagePreview(input.name, value);
+          }
+        } else {
+          console.log(`  ⚠️  Campo ${key} está vacío o es null`);
         }
+      } else {
+        console.log(`  ⚠️  Campo ${key} no encontrado en el formulario`);
       }
     });
   }
@@ -348,13 +383,28 @@ class AdminController {
       const titles = {
         hero: 'Sección Hero',
         services: 'Sección Servicios',
+        banner: 'Banner - Diseño Inteligente',
+        gallery: 'Galería de Imágenes',
         projects: 'Gestión de Proyectos',
         testimonials: 'Gestión de Testimonios',
         faq: 'Gestión de Preguntas Frecuentes',
         localities: 'Gestión de Localidades',
-        footer: 'Configuración del Footer'
+        footer: 'Configuración del Footer',
+        navbar: 'Menú de Navegación'
       };
       document.getElementById('section-title').textContent = titles[sectionName] || 'Panel de Administración';
+      
+      // Si hay datos cargados, rellenar el formulario cuando se muestra la sección
+      if (this.currentContent && this.currentContent[sectionName]) {
+        // Pequeño delay para asegurar que el DOM esté listo
+        setTimeout(() => {
+          if (sectionName !== 'projects' && sectionName !== 'testimonials' && 
+              sectionName !== 'faq' && sectionName !== 'localities' && 
+              sectionName !== 'navbar') {
+            this.fillForm(sectionName, this.currentContent[sectionName]);
+          }
+        }, 100);
+      }
       
       // Actualizar navegación activa
       document.querySelectorAll('.nav-item').forEach(item => {
@@ -378,6 +428,14 @@ class AdminController {
     
     for (const [key, value] of formData.entries()) {
       data[key] = value;
+    }
+    
+    // Si es navbar, también guardar logoText si existe
+    if (sectionName === 'navbar') {
+      const logoInput = document.querySelector('input[name="logoText"]');
+      if (logoInput && logoInput.value) {
+        data.logoText = logoInput.value;
+      }
     }
     
     try {
@@ -459,22 +517,26 @@ class AdminController {
     const list = document.getElementById('faq-list');
     if (!list) return;
     
-    if (!Array.isArray(faqs) || faqs.length === 0) {
+    // Manejar estructura con items
+    const items = (faqs && faqs.items) ? Object.values(faqs.items) : 
+                  (Array.isArray(faqs) ? faqs : []);
+    
+    if (items.length === 0) {
       list.innerHTML = '<p>No hay preguntas frecuentes agregadas</p>';
       return;
     }
     
-    list.innerHTML = faqs.map(faq => `
-      <div class="item-card" data-id="${faq.id}">
+    list.innerHTML = items.map(faq => `
+      <div class="item-card" data-id="${faq.id || ''}">
         <div class="item-card-content">
           <div class="item-card-title">${faq.question || 'Sin pregunta'}</div>
           <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">${faq.answer || ''}</p>
         </div>
         <div class="item-card-actions">
-          <button class="btn-edit" onclick="adminController.editItem('faq', '${faq.id}')">
+          <button class="btn-edit" onclick="adminController.editItem('faq', '${faq.id || ''}')">
             <i class="fas fa-edit"></i> Editar
           </button>
-          <button class="btn-delete" onclick="adminController.deleteItem('faq', '${faq.id}')">
+          <button class="btn-delete" onclick="adminController.deleteItem('faq', '${faq.id || ''}')">
             <i class="fas fa-trash"></i> Eliminar
           </button>
         </div>
@@ -489,22 +551,118 @@ class AdminController {
     const list = document.getElementById('localities-list');
     if (!list) return;
     
-    if (!Array.isArray(localities) || localities.length === 0) {
+    // Manejar estructura con items
+    const items = (localities && localities.items) ? Object.values(localities.items) : 
+                  (Array.isArray(localities) ? localities : []);
+    
+    if (items.length === 0) {
       list.innerHTML = '<p>No hay localidades agregadas</p>';
       return;
     }
     
-    list.innerHTML = localities.map(locality => `
-      <div class="item-card" data-id="${locality.id}">
+    list.innerHTML = items.map(locality => `
+      <div class="item-card" data-id="${locality.id || ''}">
         <div class="item-card-content">
           <div class="item-card-title">${locality.name || 'Sin nombre'}</div>
-          <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">${locality.description || ''}</p>
+          <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">${locality.text || locality.description || ''}</p>
         </div>
         <div class="item-card-actions">
-          <button class="btn-edit" onclick="adminController.editItem('locality', '${locality.id}')">
+          <button class="btn-edit" onclick="adminController.editItem('locality', '${locality.id || ''}')">
             <i class="fas fa-edit"></i> Editar
           </button>
-          <button class="btn-delete" onclick="adminController.deleteItem('locality', '${locality.id}')">
+          <button class="btn-delete" onclick="adminController.deleteItem('locality', '${locality.id || ''}')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  /**
+   * Renderiza la galería
+   */
+  renderGalleryList(gallery) {
+    const list = document.getElementById('gallery-list');
+    if (!list) return;
+    
+    // Manejar estructura con items
+    const items = (gallery && gallery.items) ? Object.values(gallery.items) : 
+                  (Array.isArray(gallery) ? gallery : []);
+    
+    if (items.length === 0) {
+      list.innerHTML = '<p>No hay imágenes en la galería. Agrega una para comenzar.</p>';
+      return;
+    }
+    
+    // Ordenar por order
+    items.sort((a, b) => (a.order || 0) - (b.order || 0));
+    
+    list.innerHTML = items.map((item, index) => `
+      <div class="item-card" data-id="${item.id || `item_${index}`}">
+        <div class="item-card-content">
+          ${item.imageUrl ? `<img src="${item.imageUrl}" style="max-width: 200px; max-height: 120px; border-radius: 6px; margin-bottom: 0.5rem; object-fit: cover;">` : ''}
+          <div class="item-card-title">Imagen ${index + 1}</div>
+          <div class="item-card-subtitle" style="margin-top: 0.25rem; color: #666; font-size: 0.85rem;">
+            ${item.alt || 'Sin descripción'}
+          </div>
+        </div>
+        <div class="item-card-actions">
+          <button class="btn-edit" onclick="adminController.editItem('galleryItem', '${item.id || `item_${index}`}')">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button class="btn-delete" onclick="adminController.deleteItem('galleryItem', '${item.id || `item_${index}`}')">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    `).join('');
+  }
+  
+  /**
+   * Renderiza el navbar
+   */
+  renderNavbar(navbar) {
+    // Cargar logo text
+    if (navbar.logoText) {
+      const logoInput = document.querySelector('input[name="logoText"]');
+      if (logoInput) {
+        logoInput.value = navbar.logoText;
+      }
+    }
+    
+    // Renderizar items del menú
+    const list = document.getElementById('navbar-items-list');
+    if (!list) return;
+    
+    const items = (navbar && navbar.items) ? Object.values(navbar.items) : 
+                  (Array.isArray(navbar.menuItems) ? navbar.menuItems : []);
+    
+    if (items.length === 0) {
+      list.innerHTML = '<p>No hay items en el menú. Agrega uno para comenzar.</p>';
+      return;
+    }
+    
+    // Ordenar por order
+    items.sort((a, b) => (a.order || 0) - (b.order || 0));
+    
+    list.innerHTML = items.map((item, index) => `
+      <div class="item-card" data-id="${item.id || `item_${index}`}">
+        <div class="item-card-content">
+          <div class="item-card-title">${item.text || item.label || 'Sin texto'}</div>
+          <div class="item-card-subtitle" style="margin-top: 0.25rem; color: #666; font-size: 0.85rem;">
+            <i class="fas fa-link"></i> ${item.link || item.href || 'Sin enlace'}
+          </div>
+          ${item.submenu && item.submenu.length > 0 ? `
+            <div style="margin-top: 0.5rem; padding-left: 1rem; border-left: 2px solid #e0e0e0;">
+              <small style="color: #999; font-size: 0.8rem;">Submenú (${item.submenu.length} items)</small>
+            </div>
+          ` : ''}
+        </div>
+        <div class="item-card-actions">
+          <button class="btn-edit" onclick="adminController.editItem('menuItem', '${item.id || `item_${index}`}')">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button class="btn-delete" onclick="adminController.deleteItem('menuItem', '${item.id || `item_${index}`}')">
             <i class="fas fa-trash"></i> Eliminar
           </button>
         </div>
@@ -636,6 +794,47 @@ class AdminController {
           </div>
           <button type="submit" class="btn-save">Guardar</button>
         </form>
+      `,
+      galleryItem: `
+        <form class="admin-form" data-item-type="galleryItem">
+          <div class="form-group">
+            <label>URL de la Imagen</label>
+            <div class="image-upload-group">
+              <input type="url" name="imageUrl" class="form-control" required>
+              <button type="button" class="btn-upload" data-field="imageUrl">
+                <i class="fas fa-cloud-upload-alt"></i> Subir
+              </button>
+            </div>
+            <div class="image-preview" data-preview="imageUrl"></div>
+          </div>
+          <div class="form-group">
+            <label>Alt Text (Accesibilidad)</label>
+            <input type="text" name="alt" class="form-control" placeholder="Descripción de la imagen">
+          </div>
+          <div class="form-group">
+            <label>Orden</label>
+            <input type="number" name="order" class="form-control" value="0">
+          </div>
+          <button type="submit" class="btn-save">Guardar</button>
+        </form>
+      `,
+      menuItem: `
+        <form class="admin-form" data-item-type="menuItem">
+          <div class="form-group">
+            <label>Texto del Menú</label>
+            <input type="text" name="text" class="form-control" placeholder="Proyectos, Servicios, etc." required>
+          </div>
+          <div class="form-group">
+            <label>Enlace (URL o #ancla)</label>
+            <input type="text" name="link" class="form-control" placeholder="#proyectos o https://ejemplo.com" required>
+            <small class="form-help">Puede ser una URL externa (https://...) o un ancla interno (#seccion)</small>
+          </div>
+          <div class="form-group">
+            <label>Orden</label>
+            <input type="number" name="order" class="form-control" value="0">
+          </div>
+          <button type="submit" class="btn-save">Guardar</button>
+        </form>
       `
     };
     
@@ -660,11 +859,25 @@ class AdminController {
         project: 'projects',
         testimonial: 'testimonials',
         faq: 'faq',
-        locality: 'localities'
+        locality: 'localities',
+        galleryItem: 'gallery',
+        menuItem: 'navbar'
       };
       
       const sectionName = sectionMap[type];
-      await this.contentService.createItem(sectionName, data);
+      
+      if (!sectionName) {
+        throw new Error(`Tipo de item no válido: ${type}`);
+      }
+      
+      // Para navbar, guardar en items
+      if (sectionName === 'navbar') {
+        // Guardar en navbar/items usando el servicio de navbar
+        const navbarItemsService = new FirebaseService('content/navbar/items');
+        await navbarItemsService.create(data);
+      } else {
+        await this.contentService.createItem(sectionName, data);
+      }
       this.showNotification('Item agregado exitosamente', 'success');
       this.closeModal();
       await this.loadContent();
@@ -835,8 +1048,31 @@ class AdminController {
       previewElement.src = value || 'https://via.placeholder.com/800x450?text=Imagen+Hero';
       previewElement.alt = 'Preview Hero';
     } else if (targetId === 'hero-button') {
-      // Es un botón
+      // Es un botón - actualizar texto
       previewElement.textContent = value;
+    } else if (targetId === 'hero-button-link') {
+      // Es el enlace del botón - actualizar href
+      const buttonElement = document.getElementById('preview-hero-button');
+      if (buttonElement) {
+        if (value && value.trim()) {
+          // Si es un ancla interno (#) o URL externa
+          const linkValue = value.trim();
+          if (linkValue.startsWith('#')) {
+            buttonElement.href = linkValue;
+          } else if (linkValue.startsWith('http://') || linkValue.startsWith('https://')) {
+            buttonElement.href = linkValue;
+            buttonElement.target = '_blank';
+            buttonElement.rel = 'noopener noreferrer';
+          } else {
+            // Asumir que es un ancla si no tiene protocolo
+            buttonElement.href = `#${linkValue}`;
+          }
+        } else {
+          // Sin enlace - deshabilitar
+          buttonElement.href = '#';
+          buttonElement.onclick = (e) => e.preventDefault();
+        }
+      }
     } else {
       // Es texto normal
       previewElement.textContent = value;
@@ -854,6 +1090,12 @@ class AdminController {
     inputs.forEach(input => {
       this.updateHeroPreview(input);
     });
+    
+    // Actualizar el enlace del botón si existe
+    const buttonLinkInput = form.querySelector('input[name="buttonLink"]');
+    if (buttonLinkInput) {
+      this.updateHeroPreview(buttonLinkInput);
+    }
   }
   
   /**

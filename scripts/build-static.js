@@ -137,9 +137,21 @@ function generateStaticHTML(content) {
     
     // Botón
     if (hero.buttonText) {
+      let buttonHTML = `<a href="${hero.buttonLink || '#'}" class="btn btn-hero" id="hero-button" data-cms-field="buttonText">${escapeHtml(hero.buttonText)}</a>`;
+      
+      // Si es URL externa, agregar target y rel
+      if (hero.buttonLink && (hero.buttonLink.startsWith('http://') || hero.buttonLink.startsWith('https://'))) {
+        buttonHTML = `<a href="${hero.buttonLink}" class="btn btn-hero" id="hero-button" data-cms-field="buttonText" target="_blank" rel="noopener noreferrer">${escapeHtml(hero.buttonText)}</a>`;
+      } else if (hero.buttonLink && hero.buttonLink.startsWith('#')) {
+        buttonHTML = `<a href="${hero.buttonLink}" class="btn btn-hero" id="hero-button" data-cms-field="buttonText">${escapeHtml(hero.buttonText)}</a>`;
+      } else if (hero.buttonLink && hero.buttonLink.trim()) {
+        // Asumir que es un ancla si no tiene protocolo
+        buttonHTML = `<a href="#${hero.buttonLink}" class="btn btn-hero" id="hero-button" data-cms-field="buttonText">${escapeHtml(hero.buttonText)}</a>`;
+      }
+      
       html = html.replace(
-        /<button[^>]*id="hero-button"[^>]*>.*?<\/button>/,
-        `<button class="btn btn-hero" id="hero-button" data-cms-field="buttonText">${escapeHtml(hero.buttonText)}</button>`
+        /<a[^>]*id="hero-button"[^>]*>.*?<\/a>/,
+        buttonHTML
       );
     }
   }
@@ -175,6 +187,319 @@ function generateStaticHTML(content) {
         `<button class="btn btn-services">${escapeHtml(services.buttonText)}</button>`
       );
     }
+  }
+  
+  // Reemplazar datos de Projects
+  if (content.projects && content.projects.items) {
+    const projects = Object.values(content.projects.items)
+      .filter(p => p && (p.title || p.imageUrl)) // Solo proyectos válidos
+      .sort((a, b) => (a.order || 0) - (b.order || 0)); // Ordenar por order
+    
+    if (projects.length > 0) {
+      // Organizar proyectos en páginas de 3
+      const projectsPerPage = 3;
+      const pages = [];
+      for (let i = 0; i < projects.length; i += projectsPerPage) {
+        pages.push(projects.slice(i, i + projectsPerPage));
+      }
+      
+      // Generar HTML de las páginas
+      let projectsPagesHTML = '';
+      pages.forEach((pageProjects, pageIndex) => {
+        const isActive = pageIndex === 0 ? 'projects-page-active' : '';
+        projectsPagesHTML += `<div class="projects-page ${isActive}">\n`;
+        
+        pageProjects.forEach(project => {
+          const imageUrl = project.imageUrl || 'https://via.placeholder.com/400x300?text=Proyecto';
+          const title = escapeHtml(project.title || 'Sin título');
+          const subtitle = escapeHtml(project.subtitle || '');
+          
+          projectsPagesHTML += `                <div class="project-item">
+                  <img src="${imageUrl}" alt="${title}" />
+                  <h3 class="project-title">${title}</h3>
+                  <p class="project-subtitle">${subtitle}</p>
+                </div>\n`;
+        });
+        
+        projectsPagesHTML += '              </div>\n';
+      });
+      
+      // Generar indicadores
+      let indicatorsHTML = '';
+      pages.forEach((_, pageIndex) => {
+        const isActive = pageIndex === 0 ? 'projects-indicator-active' : '';
+        indicatorsHTML += `<button class="projects-indicator ${isActive}" data-page="${pageIndex}"></button>\n            `;
+      });
+      
+      // Reemplazar el carrusel completo
+      // Buscar desde projects-carousel-wrapper hasta el cierre de projects-indicators
+      // Usar un regex más robusto que capture todo el contenido
+      const projectsCarouselRegex = /<div class="projects-carousel-wrapper">[\s\S]*?<\/div>\s*<\/div>\s*<div class="projects-indicators">[\s\S]*?<\/div>/;
+      const projectsCarouselHTML = `<div class="projects-carousel-wrapper">
+              ${projectsPagesHTML}
+            </div>
+            
+            <!-- Indicadores -->
+            <div class="projects-indicators">
+            ${indicatorsHTML}</div>`;
+      
+      const replaced = html.replace(projectsCarouselRegex, projectsCarouselHTML);
+      if (replaced === html) {
+        console.warn('⚠️  No se pudo encontrar el carrusel de proyectos en el HTML.');
+        console.warn('   El carrusel se mantendrá con el contenido por defecto.');
+      } else {
+        html = replaced;
+        console.log(`✅ ${projects.length} proyectos generados en ${pages.length} página(s)`);
+      }
+    } else {
+      console.log('⚠️  No hay proyectos para generar');
+    }
+  }
+  
+  // Reemplazar datos de Testimonials
+  if (content.testimonials && content.testimonials.items) {
+    const testimonials = Object.values(content.testimonials.items)
+      .filter(t => t && (t.name || t.text)) // Solo testimonios válidos
+      .sort((a, b) => (a.order || 0) - (b.order || 0)); // Ordenar por order
+    
+    if (testimonials.length > 0) {
+      let testimonialsHTML = '';
+      testimonials.forEach((testimonial, index) => {
+        // Alternar testimonial-item-side cada 2 items (patrón: 0, 2, 3, 5)
+        const isSide = index === 0 || index === 2 || index === 3 || index === 5;
+        const sideClass = isSide ? 'testimonial-item-side' : '';
+        
+        const avatarUrl = testimonial.avatarUrl || 'https://via.placeholder.com/100?text=Avatar';
+        const name = escapeHtml(testimonial.name || 'Sin nombre');
+        const position = escapeHtml(testimonial.position || '');
+        const text = escapeHtml(testimonial.text || '');
+        
+        testimonialsHTML += `            <div class="testimonial-item ${sideClass}">
+              <div class="testimonial-header">
+                <div class="testimonial-avatar">
+                  <img src="${avatarUrl}" alt="${name}" />
+                </div>
+                <div class="testimonial-info">
+                  <h4 class="testimonial-name">${name.toUpperCase()}</h4>
+                  <p class="testimonial-position">${position}</p>
+                </div>
+              </div>
+              <p class="testimonial-text">«${text}»</p>
+            </div>
+            
+            `;
+      });
+      
+      // Reemplazar testimonials-grid
+      const testimonialsGridRegex = /<div class="testimonials-grid">[\s\S]*?<\/div>/;
+      const testimonialsGridHTML = `<div class="testimonials-grid">
+          ${testimonialsHTML.trim()}
+          </div>`;
+      
+      const replaced = html.replace(testimonialsGridRegex, testimonialsGridHTML);
+      if (replaced === html) {
+        console.warn('⚠️  No se pudo encontrar testimonials-grid en el HTML.');
+      } else {
+        html = replaced;
+        console.log(`✅ ${testimonials.length} testimonios generados`);
+      }
+    } else {
+      console.log('⚠️  No hay testimonios para generar');
+    }
+  }
+  
+  // Reemplazar datos de FAQ
+  if (content.faq && content.faq.items) {
+    const faqs = Object.values(content.faq.items)
+      .filter(f => f && (f.question || f.answer)) // Solo FAQs válidos
+      .sort((a, b) => (a.order || 0) - (b.order || 0)); // Ordenar por order
+    
+    if (faqs.length > 0) {
+      let faqsHTML = '';
+      faqs.forEach((faq, index) => {
+        const isActive = index === 0 || faq.isActive;
+        const activeClass = isActive ? 'faq-item-active' : '';
+        const chevronUpStyle = isActive ? '' : 'style="display: none;"';
+        const chevronDownStyle = isActive ? 'style="display: none;"' : '';
+        const answerStyle = isActive ? '' : 'style="display: none;"';
+        
+        const question = escapeHtml(faq.question || 'Sin pregunta');
+        const answer = escapeHtml(faq.answer || '');
+        
+        faqsHTML += `            <div class="faq-item ${activeClass}">
+              <div class="faq-question">
+                <h3 class="faq-question-text">${question}</h3>
+                <i class="fas fa-chevron-up faq-icon faq-icon-up" ${chevronUpStyle}></i>
+                <i class="fas fa-chevron-down faq-icon faq-icon-down" ${chevronDownStyle}></i>
+              </div>
+              <div class="faq-answer" ${answerStyle}>
+                <p>${answer}</p>
+              </div>
+            </div>
+            
+            `;
+      });
+      
+      // Reemplazar faq-list
+      const faqListRegex = /<div class="faq-list">[\s\S]*?<\/div>/;
+      const faqListHTML = `<div class="faq-list">
+          ${faqsHTML.trim()}
+          </div>`;
+      
+      const replaced = html.replace(faqListRegex, faqListHTML);
+      if (replaced === html) {
+        console.warn('⚠️  No se pudo encontrar faq-list en el HTML.');
+      } else {
+        html = replaced;
+        console.log(`✅ ${faqs.length} FAQs generados`);
+      }
+    } else {
+      console.log('⚠️  No hay FAQs para generar');
+    }
+  }
+  
+  // Reemplazar datos de Localities
+  if (content.localities && content.localities.items) {
+    const localities = Object.values(content.localities.items)
+      .filter(l => l && l.name) // Solo localidades válidas
+      .sort((a, b) => (a.order || 0) - (b.order || 0)); // Ordenar por order
+    
+    if (localities.length > 0) {
+      // Organizar localidades en páginas de 2
+      const localitiesPerPage = 2;
+      const pages = [];
+      for (let i = 0; i < localities.length; i += localitiesPerPage) {
+        pages.push(localities.slice(i, i + localitiesPerPage));
+      }
+      
+      // Generar HTML de las páginas
+      let localitiesPagesHTML = '';
+      pages.forEach((pageLocalities, pageIndex) => {
+        const isActive = pageIndex === 0 ? 'localities-page-active' : '';
+        localitiesPagesHTML += `<div class="localities-page ${isActive}">
+                `;
+        
+        pageLocalities.forEach(locality => {
+          const name = escapeHtml(locality.name || 'Sin nombre');
+          const text = escapeHtml(locality.text || locality.description || '');
+          
+          localitiesPagesHTML += `                  <div class="locality-card">
+                    <i class="fas fa-map-marker-alt locality-icon"></i>
+                    <h2 class="locality-title">${name}</h2>
+                    <p class="locality-text">${text}</p>
+                  </div>
+                `;
+        });
+        
+        localitiesPagesHTML += `              </div>
+                
+                `;
+      });
+      
+      // Generar indicadores
+      let indicatorsHTML = '';
+      pages.forEach((_, pageIndex) => {
+        const isActive = pageIndex === 0 ? 'localities-indicator-active' : '';
+        indicatorsHTML += `<button class="localities-indicator ${isActive}" data-page="${pageIndex}"></button>
+              `;
+      });
+      
+      // Reemplazar el carrusel completo
+      const localitiesCarouselRegex = /<div class="localities-carousel-wrapper">[\s\S]*?<\/div>\s*<\/div>\s*<div class="localities-indicators">[\s\S]*?<\/div>/;
+      const localitiesCarouselHTML = `<div class="localities-carousel-wrapper">
+                ${localitiesPagesHTML.trim()}
+              </div>
+              
+              <!-- Indicadores -->
+              <div class="localities-indicators">
+              ${indicatorsHTML.trim()}</div>`;
+      
+      const replaced = html.replace(localitiesCarouselRegex, localitiesCarouselHTML);
+      if (replaced === html) {
+        console.warn('⚠️  No se pudo encontrar el carrusel de localidades en el HTML.');
+      } else {
+        html = replaced;
+        console.log(`✅ ${localities.length} localidades generadas en ${pages.length} página(s)`);
+      }
+    } else {
+      console.log('⚠️  No hay localidades para generar');
+    }
+  }
+  
+  // Reemplazar datos del Footer
+  if (content.footer) {
+    const footer = content.footer;
+    
+    // Columna 1: Sedes (locations)
+    if (footer.locations && Array.isArray(footer.locations)) {
+      let locationsHTML = '';
+      footer.locations.forEach(location => {
+        const country = escapeHtml(location.country || '');
+        const address = escapeHtml(location.address || '');
+        const email = escapeHtml(location.email || '');
+        const buttonText = escapeHtml(location.buttonText || 'Contacto');
+        
+        locationsHTML += `            <div class="footer-location">
+              <h4 class="footer-location-title">${country}</h4>
+              <p class="footer-location-address">${address}</p>
+              <p class="footer-location-email">${email}</p>
+              <button class="btn btn-footer">${buttonText}</button>
+            </div>
+          `;
+      });
+      
+      const footerRow2Regex = /<div class="footer-row-2">[\s\S]*?<\/div>\s*<\/div>\s*<div class="footer-col footer-col-2">/;
+      const footerRow2HTML = `<div class="footer-row-2">
+          ${locationsHTML.trim()}
+          </div>
+        </div>
+        <div class="footer-col footer-col-2">`;
+      
+      html = html.replace(footerRow2Regex, footerRow2HTML);
+    }
+    
+    // Columna 2: Legal links
+    if (footer.legalLinks && Array.isArray(footer.legalLinks)) {
+      let legalLinksHTML = '';
+      footer.legalLinks.forEach(link => {
+        const url = escapeHtml(link.url || '#');
+        const text = escapeHtml(link.text || '');
+        legalLinksHTML += `              <a href="${url}" class="footer-link">${text}</a>
+            `;
+      });
+      
+      const footerNavRegex = /<nav class="footer-nav">[\s\S]*?<\/nav>/;
+      const footerNavHTML = `<nav class="footer-nav">
+            ${legalLinksHTML.trim()}
+          </nav>`;
+      
+      html = html.replace(footerNavRegex, footerNavHTML);
+    }
+    
+    // Columna 3: Social links
+    if (footer.socialLinks && Array.isArray(footer.socialLinks)) {
+      let socialLinksHTML = '';
+      footer.socialLinks.forEach(link => {
+        const url = escapeHtml(link.url || '#');
+        const platform = escapeHtml(link.platform || '');
+        const iconClass = link.iconClass || 'fab fa-facebook-f';
+        const ariaLabel = escapeHtml(link.ariaLabel || platform);
+        
+        socialLinksHTML += `              <a href="${url}" class="footer-social-link" aria-label="${ariaLabel}" target="_blank" rel="noopener noreferrer">
+                <i class="${iconClass}"></i>
+              </a>
+            `;
+      });
+      
+      const footerSocialRegex = /<div class="footer-social">[\s\S]*?<\/div>/;
+      const footerSocialHTML = `<div class="footer-social">
+            ${socialLinksHTML.trim()}
+          </div>`;
+      
+      html = html.replace(footerSocialRegex, footerSocialHTML);
+    }
+    
+    console.log('✅ Footer generado');
   }
   
   // Remover scripts de carga dinámica (ya tenemos los datos estáticos)

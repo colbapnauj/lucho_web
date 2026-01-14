@@ -59,8 +59,36 @@ class ContentLoader {
     
     // Actualizar botón
     const heroButton = document.getElementById('hero-button');
-    if (heroButton && data.buttonText) {
-      heroButton.textContent = data.buttonText;
+    if (heroButton) {
+      // Actualizar texto
+      if (data.buttonText) {
+        heroButton.textContent = data.buttonText;
+      }
+      
+      // Actualizar enlace/acción
+      if (data.buttonLink && data.buttonLink.trim()) {
+        const linkValue = data.buttonLink.trim();
+        if (linkValue.startsWith('#')) {
+          // Ancla interno
+          heroButton.href = linkValue;
+          heroButton.removeAttribute('target');
+          heroButton.removeAttribute('rel');
+        } else if (linkValue.startsWith('http://') || linkValue.startsWith('https://')) {
+          // URL externa
+          heroButton.href = linkValue;
+          heroButton.target = '_blank';
+          heroButton.rel = 'noopener noreferrer';
+        } else {
+          // Asumir que es un ancla si no tiene protocolo
+          heroButton.href = `#${linkValue}`;
+          heroButton.removeAttribute('target');
+          heroButton.removeAttribute('rel');
+        }
+      } else {
+        // Sin enlace - deshabilitar
+        heroButton.href = '#';
+        heroButton.onclick = (e) => e.preventDefault();
+      }
     }
   }
   

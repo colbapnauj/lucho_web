@@ -47,6 +47,14 @@
           <i class="fas fa-briefcase"></i>
           <span>Servicios</span>
         </a>
+        <a href="#banner" class="nav-item" data-section="banner">
+          <i class="fas fa-image"></i>
+          <span>Banner</span>
+        </a>
+        <a href="#gallery" class="nav-item" data-section="gallery">
+          <i class="fas fa-images"></i>
+          <span>Galería</span>
+        </a>
         <a href="#projects" class="nav-item" data-section="projects">
           <i class="fas fa-project-diagram"></i>
           <span>Proyectos</span>
@@ -66,6 +74,10 @@
         <a href="#footer" class="nav-item" data-section="footer">
           <i class="fas fa-info-circle"></i>
           <span>Footer</span>
+        </a>
+        <a href="#navbar" class="nav-item" data-section="navbar">
+          <i class="fas fa-bars"></i>
+          <span>Menú</span>
         </a>
       </nav>
       <div class="admin-user">
@@ -118,6 +130,11 @@
                   <input type="text" name="buttonText" class="form-control" placeholder="CONTÁCTANOS" data-preview-target="hero-button">
                 </div>
                 <div class="form-group">
+                  <label>Acción del Botón</label>
+                  <input type="text" name="buttonLink" class="form-control" placeholder="#contacto o https://ejemplo.com" data-preview-target="hero-button-link">
+                  <small class="form-help">Puede ser una URL externa (https://...) o un ancla interno (#seccion). Déjalo vacío para deshabilitar el botón.</small>
+                </div>
+                <div class="form-group">
                   <label>URL de Imagen</label>
                   <div class="image-upload-group">
                     <input type="url" name="imageUrl" class="form-control" placeholder="https://..." data-preview-target="hero-image">
@@ -154,7 +171,7 @@
                     <p class="hero-pretitle-preview" id="preview-hero-pretitle">Diseño Arquitectónico de Excelencia</p>
                     <h1 class="hero-title-preview" id="preview-hero-title">ARQUITECTOS EN AREQUIPA</h1>
                     <div class="hero-actions-preview">
-                      <button class="btn btn-hero-preview" id="preview-hero-button">CONTÁCTANOS</button>
+                      <a href="#" class="btn btn-hero-preview" id="preview-hero-button">CONTÁCTANOS</a>
                     </div>
                   </div>
                 </div>
@@ -187,6 +204,49 @@
               <i class="fas fa-save"></i> Guardar Cambios
             </button>
           </form>
+        </section>
+
+        <!-- Banner Section -->
+        <section id="banner-section" class="admin-section" style="display: none;">
+          <h2>Banner - Diseño Inteligente</h2>
+          <p class="section-description">Edita la imagen y el texto del banner que aparece después de la sección de servicios.</p>
+          <form class="admin-form" data-section="banner">
+            <div class="form-group">
+              <label>URL de la Imagen</label>
+              <div class="image-upload-group">
+                <input type="url" name="imageUrl" class="form-control" placeholder="https://..." data-preview-target="banner-image">
+                <button type="button" class="btn-upload" data-field="imageUrl">
+                  <i class="fas fa-cloud-upload-alt"></i> Subir Imagen
+                </button>
+              </div>
+              <div class="image-preview" data-preview="imageUrl"></div>
+            </div>
+            <div class="form-group">
+              <label>Texto del Banner</label>
+              <input type="text" name="text" class="form-control" placeholder="DISEÑO INTELIGENTE" data-preview-target="banner-text">
+            </div>
+            <div class="form-group">
+              <label>Alt Text (Accesibilidad)</label>
+              <input type="text" name="alt" class="form-control" placeholder="Descripción de la imagen">
+            </div>
+            <button type="submit" class="btn-save">
+              <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+          </form>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery-section" class="admin-section" style="display: none;">
+          <h2>Galería de Imágenes</h2>
+          <p class="section-description">Gestiona las imágenes del carrusel con transiciones automáticas.</p>
+          
+          <div id="gallery-list" class="items-list">
+            <!-- Los items de la galería se cargarán aquí dinámicamente -->
+          </div>
+          
+          <button type="button" class="btn-add" data-type="galleryItem">
+            <i class="fas fa-plus"></i> Agregar Imagen a la Galería
+          </button>
         </section>
 
         <!-- Projects Section -->
@@ -272,6 +332,29 @@
             <button type="submit" class="btn-save">
               <i class="fas fa-save"></i> Guardar Cambios
             </button>
+          </form>
+        </section>
+
+        <!-- Navbar Section -->
+        <section id="navbar-section" class="admin-section" style="display: none;">
+          <h2>Menú de Navegación</h2>
+          <p class="section-description">Edita los items del menú principal. Puedes configurar el texto y el enlace (URL externa o ancla interno #seccion).</p>
+          
+          <div id="navbar-items-list" class="items-list">
+            <!-- Los items del menú se cargarán aquí dinámicamente -->
+          </div>
+          
+          <button type="button" class="btn-add" data-type="menuItem">
+            <i class="fas fa-plus"></i> Agregar Item al Menú
+          </button>
+          
+          <div class="form-group" style="margin-top: 2rem;">
+            <label>Logo Texto</label>
+            <input type="text" name="logoText" class="form-control" placeholder="ARQUITECTURA" form="navbar-form">
+          </div>
+          
+          <form class="admin-form" data-section="navbar" id="navbar-form" style="display: none;">
+            <!-- Formulario oculto para guardar datos del navbar -->
           </form>
         </section>
       </div>
