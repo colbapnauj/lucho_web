@@ -107,6 +107,44 @@ class AdminController {
   showLoginScreen() {
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('admin-panel').style.display = 'none';
+    this.showLoginForm();
+  }
+
+  /**
+   * Muestra el formulario de login (oculta el de reset)
+   */
+  showLoginForm() {
+    const loginWrapper = document.getElementById('login-form-wrapper');
+    const resetBlock = document.getElementById('reset-password-block');
+    if (loginWrapper) loginWrapper.style.display = 'block';
+    if (resetBlock) resetBlock.style.display = 'none';
+    const loginError = document.getElementById('login-error');
+    if (loginError) {
+      loginError.style.display = 'none';
+      loginError.textContent = '';
+    }
+  }
+
+  /**
+   * Muestra el bloque de restablecer contraseña
+   */
+  showResetPasswordForm() {
+    const loginWrapper = document.getElementById('login-form-wrapper');
+    const resetBlock = document.getElementById('reset-password-block');
+    if (loginWrapper) loginWrapper.style.display = 'none';
+    if (resetBlock) resetBlock.style.display = 'block';
+    const resetError = document.getElementById('reset-error');
+    const resetSuccess = document.getElementById('reset-success');
+    if (resetError) {
+      resetError.style.display = 'none';
+      resetError.textContent = '';
+    }
+    if (resetSuccess) {
+      resetSuccess.style.display = 'none';
+      resetSuccess.textContent = '';
+    }
+    const resetEmail = document.getElementById('reset-email');
+    if (resetEmail) resetEmail.value = document.getElementById('email')?.value || '';
   }
   
   /**
@@ -130,7 +168,31 @@ class AdminController {
     if (loginForm) {
       loginForm.addEventListener('submit', (e) => this.handleLogin(e));
     }
-    
+
+    // Reset password link
+    const linkResetPassword = document.getElementById('link-reset-password');
+    if (linkResetPassword) {
+      linkResetPassword.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.showResetPasswordForm();
+      });
+    }
+
+    // Back to login link
+    const linkBackLogin = document.getElementById('link-back-login');
+    if (linkBackLogin) {
+      linkBackLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.showLoginForm();
+      });
+    }
+
+    // Reset password form
+    const resetPasswordForm = document.getElementById('reset-password-form');
+    if (resetPasswordForm) {
+      resetPasswordForm.addEventListener('submit', (e) => this.handleResetPassword(e));
+    }
+
     // Logout button
     const logoutBtn = document.getElementById('btn-logout');
     if (logoutBtn) {
@@ -248,6 +310,33 @@ class AdminController {
     }
   }
   
+  /**
+   * Maneja el envío del formulario de restablecer contraseña
+   */
+  async handleResetPassword(e) {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value.trim();
+    const errorDiv = document.getElementById('reset-error');
+    const successDiv = document.getElementById('reset-success');
+
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+    errorDiv.textContent = '';
+    successDiv.textContent = '';
+
+    const result = await this.authService.sendPasswordReset(email);
+
+    if (result.success) {
+      successDiv.textContent = 'Revisa tu correo. Te enviamos un enlace para restablecer tu contraseña.';
+      successDiv.style.display = 'block';
+      form.reset();
+    } else {
+      errorDiv.textContent = result.error;
+      errorDiv.style.display = 'block';
+    }
+  }
+
   /**
    * Maneja el logout
    */

@@ -10,6 +10,7 @@ export {
   signOut,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   ref,
   get,
   set,

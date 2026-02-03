@@ -3,6 +3,7 @@ import {
   signOut, 
   onAuthStateChanged,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   auth
 } from '../../firebase-config-cdn.js';
 
@@ -55,6 +56,22 @@ export class AuthService {
     }
   }
   
+  /**
+   * Envía un correo para restablecer la contraseña
+   */
+  async sendPasswordReset(email) {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      return { success: true };
+    } catch (error) {
+      console.error('Password reset error:', error);
+      return {
+        success: false,
+        error: this.getErrorMessage(error.code)
+      };
+    }
+  }
+
   /**
    * Cierra sesión
    */
@@ -136,7 +153,9 @@ export class AuthService {
       'auth/weak-password': 'La contraseña es muy débil',
       'auth/invalid-email': 'Email inválido',
       'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde',
-      'auth/network-request-failed': 'Error de conexión'
+      'auth/network-request-failed': 'Error de conexión',
+      'auth/invalid-credential': 'Credenciales inválidas',
+      'auth/operation-not-allowed': 'Operación no permitida'
     };
     
     return errorMessages[errorCode] || 'Error de autenticación';
