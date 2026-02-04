@@ -23,8 +23,11 @@ dist-ssr
 *.sln
 *.sw?
 
-# Firebase config (contiene credenciales)
+# Environment and generated config
+.env
+.env.local
 firebase-config.js
+firebase-config.generated.js
 
 # Cloudinary config (contiene credenciales)
 src/utils/cloudinary-config.js

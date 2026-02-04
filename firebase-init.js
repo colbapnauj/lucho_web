@@ -20,17 +20,7 @@ import {
   push,
   onValue
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
-// Configuración del proyecto lucho-web-cms
-const firebaseConfig = {
-  apiKey: "AIzaSyAA-cqXn0EPGa5fnoFcHrGt1oNz2ev4Xo0",
-  authDomain: "lucho-web-cms.firebaseapp.com",
-  databaseURL: "https://lucho-web-cms-default-rtdb.firebaseio.com",
-  projectId: "lucho-web-cms",
-  storageBucket: "lucho-web-cms.firebasestorage.app",
-  messagingSenderId: "622374714670",
-  appId: "1:622374714670:web:fcf7045d13b0aa42458ebf"
-};
+import { firebaseConfig } from './firebase-config.generated.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

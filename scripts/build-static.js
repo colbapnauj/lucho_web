@@ -18,6 +18,7 @@ import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { readdirSync, statSync } from 'fs';
+import { execSync } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -579,6 +580,14 @@ function copyRecursive(src, dest) {
 async function buildDist() {
   console.log('🏗️  Construyendo directorio dist/...');
   
+  // Generar firebase-config.generated.js desde variables de entorno
+  try {
+    execSync('node scripts/generate-firebase-config.js', { stdio: 'inherit', cwd: rootDir });
+  } catch (e) {
+    console.error('❌ Configura las variables VITE_FIREBASE_* en Netlify o crea .env local.');
+    throw e;
+  }
+  
   // Limpiar y crear dist
   if (existsSync(distDir)) {
     // Eliminar directorio recursivamente
@@ -627,6 +636,10 @@ async function buildDist() {
   // Copiar firebase-config-cdn.js (necesario para admin)
   if (existsSync(join(rootDir, 'firebase-config-cdn.js'))) {
     copyFileSync(join(rootDir, 'firebase-config-cdn.js'), join(distDir, 'firebase-config-cdn.js'));
+  }
+  // Copiar firebase-config.generated.js (generado desde .env)
+  if (existsSync(join(rootDir, 'firebase-config.generated.js'))) {
+    copyFileSync(join(rootDir, 'firebase-config.generated.js'), join(distDir, 'firebase-config.generated.js'));
   }
   
   // Copiar src/ (necesario para admin)
